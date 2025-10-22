@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrCodeStyling.Avalonia", "QrCodeStyling.Avalonia\QrCodeStyling.Avalonia.csproj", "{36EA1610-8D0C-4512-8B2B-608CA7357ED6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrCodeStyling.Avalonia.Test", "QrCodeStyling.Avalonia.Test\QrCodeStyling.Avalonia.Test.csproj", "{9897D88B-6C44-480C-8228-E1D26DC0C897}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36EA1610-8D0C-4512-8B2B-608CA7357ED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36EA1610-8D0C-4512-8B2B-608CA7357ED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36EA1610-8D0C-4512-8B2B-608CA7357ED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36EA1610-8D0C-4512-8B2B-608CA7357ED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9897D88B-6C44-480C-8228-E1D26DC0C897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9897D88B-6C44-480C-8228-E1D26DC0C897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9897D88B-6C44-480C-8228-E1D26DC0C897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9897D88B-6C44-480C-8228-E1D26DC0C897}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

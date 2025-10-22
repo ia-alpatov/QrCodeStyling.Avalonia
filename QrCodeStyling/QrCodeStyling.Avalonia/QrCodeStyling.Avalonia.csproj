@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <RootNamespace>QrCodeStyling.Avalonia</RootNamespace>
+        <UserSecretsId>712f85e4-12d3-41b0-a417-5714a113444f</UserSecretsId>
+        <LangVersion>default</LangVersion>
+        <Nullable>enable</Nullable>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU;x64</Platforms>
+        <Title>QrCodeStyling.Avalonia</Title>
+        <Description>QrCodeStyling.Avalonia is a simple library, written in C#.NET, which enables you to create beautiful QR codes.</Description>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>QrCodeStyling.Avalonia</PackageId>
+        <PackageDescription>QrCodeStyling.Avalonia is a simple library, written in C#.NET, which enables you to create beautiful QR codes.</PackageDescription>
+        <PackageTags>c#;csharp;avalonia;avaloniaui;ui;qr;qrcode-styling;qr-code-styling;qr-styling;qrcode;qr-generator;qr-code-generator</PackageTags>
+        <Version>1.0.0</Version>
+        <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+        <PackageOwners>Ivan Alpatov</PackageOwners>
+        <Copyright>Ivan Alpatov</Copyright>
+        <Authors>Ivan Alpatov</Authors>
+        <PackageIcon>nuget-icon.png</PackageIcon>
+        <PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <IsPackable>true</IsPackable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageProjectUrl>https://github.com/ia-alpatov/QrCodeStyling.Avalonia</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ia-alpatov/QrCodeStyling.Avalonia.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
+        <None Include="Assets\nuget-readme.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,118 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:QrCodeStyling.Avalonia.Test.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:QrCodeStyling.Avalonia;assembly=QrCodeStyling.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="QrCodeStyling.Avalonia.Test.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="QrCodeStyling.Avalonia.Test">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Panel>
+        <StackPanel VerticalAlignment="Center"
+                    Spacing="10">
+            <avalonia:QrCode
+                ImagePaddingModules="0.2"
+                Image="{Binding Image}"
+                CornerDots="{Binding QrCornerDotsStyle}"
+                Dot="{Binding QrDotStyle}"
+                Width="{Binding QrCodeSize}"
+                Height="{Binding QrCodeSize}"
+                Padding="{Binding QrCodePadding}"
+                Data="{Binding QrCodeString}"
+                CornerRadius="{Binding CornerRadius}"
+                ErrorCorrection="{Binding QrCodeEccLevel}">
+
+                <avalonia:QrCode.Foreground>
+                    <LinearGradientBrush>
+                        <GradientStop Offset="0"
+                                      Color="{Binding QrCodeForegroundColor1}" />
+                        <GradientStop Offset="1"
+                                      Color="{Binding QrCodeForegroundColor2}" />
+                    </LinearGradientBrush>
+                </avalonia:QrCode.Foreground>
+
+                <avalonia:QrCode.Background>
+                    <LinearGradientBrush>
+                        <GradientStop Offset="0"
+                                      Color="{Binding QrCodeBackgroundColor1}" />
+                        <GradientStop Offset="1"
+                                      Color="{Binding QrCodeBackgroundColor2}" />
+                    </LinearGradientBrush>
+                </avalonia:QrCode.Background>
+            </avalonia:QrCode>
+
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="10">
+                <Label Content="QRCode Data:"
+                       VerticalAlignment="Center" />
+                <TextBox Name="QrDataBox"
+                         Width="{Binding QrCodeSize}"
+                         Text="{Binding QrCodeString, Mode=TwoWay}" />
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="10">
+                <Label Content="Dot style:"
+                       VerticalAlignment="Center" />
+                <ComboBox
+                    Width="{Binding QrCodeSize}"
+                    ItemsSource="{Binding QrDotStyles}"
+                    SelectedItem="{Binding QrDotStyle, Mode=TwoWay}" />
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="10">
+                <Label Content="Corner dots style:"
+                       VerticalAlignment="Center" />
+                <ComboBox
+                    Width="{Binding QrCodeSize}"
+                    ItemsSource="{Binding QrCornerDotsStyles}"
+                    SelectedItem="{Binding QrCornerDotsStyle, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="10">
+                <Label Content="ECC Level:"
+                       VerticalAlignment="Center" />
+                <ComboBox Name="EccLevelComboBox"
+                          Width="{Binding QrCodeSize}"
+                          ItemsSource="{Binding Levels}"
+                          SelectedItem="{Binding QrCodeEccLevel, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="10">
+                <Button Content="Randomize Data"
+                        Command="{Binding RandomizeData}" />
+                <Button Content="Randomize Colors"
+                        Command="{Binding RandomizeColors}" />
+            </StackPanel>
+
+            <Button Content="Reset QRCode"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ResetQrCode}" />
+            
+            <Button Content="Update image"
+                    HorizontalAlignment="Center"
+                    Command="{Binding UpdateImage}" />
+        </StackPanel>
+    </Panel>
+
+</Window>
