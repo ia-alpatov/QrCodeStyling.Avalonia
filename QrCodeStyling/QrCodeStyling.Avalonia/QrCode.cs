@@ -330,21 +330,20 @@ namespace QrCodeStyling.Avalonia
         /// </summary>
         private void OnLayoutChanged(Gma.QrCodeNet.Encoding.QrCode qrCodeData)
         {
-            // Per-control bounds and matrix dimensions.
             var bounds = new Rect(0, 0, Width, Height);
             var matrix = qrCodeData.Matrix;
             var columnCount = matrix.Width + QuietMargin;
             var rowCount = matrix.Height + QuietMargin;
 
-            // The size of each symbol taking into account the size of the QRCode and our custom quiet zone aka padding
             var symbolSize = new Size(
-                (Width - Padding.Left - Padding.Right) / columnCount,
-                (Height - Padding.Top - Padding.Bottom) / rowCount
+                (Width  - Padding.Left - Padding.Right)  / columnCount,
+                (Height - Padding.Top  - Padding.Bottom) / rowCount
             );
 
             var dataBounds = new Rect(0, 0, Width, Height)
                 .Deflate(Padding)
-                .Deflate(new Thickness(symbolSize.Width * QuietZoneCount, symbolSize.Height * QuietZoneCount));
+                .Deflate(new Thickness(symbolSize.Width * QuietZoneCount,
+                    symbolSize.Height * QuietZoneCount));
 
             _imageRect = null;
             _imageMaskRect = null;
@@ -352,44 +351,34 @@ namespace QrCodeStyling.Avalonia
             if (Image is not null)
             {
                 var clampedScale = Math.Clamp(ImageScale, 0.0, 1.0);
-                var minSide = Math.Min(dataBounds.Width, dataBounds.Height);
-                var side = minSide * clampedScale;
+                var side = Math.Min(dataBounds.Width, dataBounds.Height) * clampedScale;
 
-                var cx = dataBounds.Left + dataBounds.Width / 2.0;
-                var cy = dataBounds.Top + dataBounds.Height / 2.0;
+                var cx = dataBounds.Left + dataBounds.Width  / 2.0;
+                var cy = dataBounds.Top  + dataBounds.Height / 2.0;
 
                 var dest = new Rect(cx - side / 2.0, cy - side / 2.0, side, side);
 
                 var pads = Math.Max(0.0, ImagePaddingModules);
-                var padX = symbolSize.Width * pads;
+                var padX = symbolSize.Width  * pads;
                 var padY = symbolSize.Height * pads;
-                var mask = dest.Inflate(new Thickness(padX, padY, padX, padY));
 
                 _imageRect = dest;
-                _imageMaskRect = mask;
+                _imageMaskRect = dest.Inflate(new Thickness(padX, padY, padX, padY));
             }
 
-            // Build StreamGeometry in one pass
-            var geometry = new StreamGeometry { };
+            var geometry = new StreamGeometry();
             using (var ctx = geometry.Open())
             {
-                ctx.BeginFigure(bounds.TopLeft, true);
-                ctx.LineTo(bounds.TopRight); // CW
-                ctx.LineTo(bounds.BottomRight);
-                ctx.LineTo(bounds.BottomLeft);
-                ctx.EndFigure(true);
-
-                // Finder patterns
                 AddPositionDetectionPattern(ctx, bounds, symbolSize);
 
-                // Data modules
                 for (var row = 0; row < matrix.Height; row++)
                     ProcessRow(ctx, matrix, row, symbolSize);
             }
 
             _oldQrCodeGeometry = _qrCodeGeometry;
-            _qrCodeGeometry = (geometry, 0); // start at 0% opacity
+            _qrCodeGeometry = (geometry, 0);
         }
+
 
         /// <summary>
         /// Walks one matrix row and appends figures for set modules, honoring the image mask,
@@ -445,22 +434,24 @@ namespace QrCodeStyling.Avalonia
         private bool IntersectsImageMask(Rect r) =>
             _imageMaskRect is Rect m && m.Intersects(r);
 
-        private void AddModuleFigure(StreamGeometryContext ctx, Rect b, bool left, bool right, bool top, bool bottom,
+        private void AddModuleFigure(
+            StreamGeometryContext ctx, Rect b,
+            bool left, bool right, bool top, bool bottom,
             DotType type)
         {
             switch (type)
             {
                 case DotType.Square:
-                    AddRect(ctx, b, ccw: true);
+                    AddRect(ctx, b, ccw: false);  
                     return;
                 case DotType.Circle:
-                    AddCircle(ctx, b, ccw: true);
+                    AddCircle(ctx, b, ccw: false);
                     return;
                 case DotType.Triangle:
-                    AddTriangle(ctx, b, left, right, top, bottom);
+                    AddTriangle(ctx, b, left, right, top, bottom); 
                     return;
                 default:
-                    AddRect(ctx, b, ccw: true);
+                    AddRect(ctx, b, ccw: false);
                     return;
             }
         }
@@ -864,30 +855,44 @@ namespace QrCodeStyling.Avalonia
         /// <param name="geometry">Geometry containing the QRCode Geometry</param>
         /// <param name="bounds">Bounds of the control itself</param>
         /// <param name="symbolSize">The size of each symbol</param>
-        private void AddPositionDetectionPattern(StreamGeometryContext geometry, Rect bounds, Size symbolSize)
+        private void AddPositionDetectionPattern(StreamGeometryContext ctx, Rect bounds, Size symbolSize)
         {
             var dataBounds = bounds
                 .Deflate(Padding)
-                .Deflate(new Thickness(symbolSize.Width * QuietZoneCount, symbolSize.Height * QuietZoneCount));
+                .Deflate(new Thickness(symbolSize.Width * QuietZoneCount,
+                    symbolSize.Height * QuietZoneCount));
 
-            var markerSize = symbolSize * 7; // 7×7
+            var markerSize = symbolSize * 7;
 
             for (var i = 0; i < 3; i++)
             {
                 var topLeft = new Point(
-                    i == 1 ? dataBounds.Right - markerSize.Width : dataBounds.Left,
+                    i == 1 ? dataBounds.Right  - markerSize.Width  : dataBounds.Left,
                     i == 2 ? dataBounds.Bottom - markerSize.Height : dataBounds.Top);
 
-                var outerRect = new Rect(topLeft, markerSize); // 7×7
-                var innerRingRect = outerRect.Deflate(new Thickness(symbolSize.Width, symbolSize.Height)); // 5×5
+                var outerRect = new Rect(topLeft, markerSize);                                     
+                var innerRect = outerRect.Deflate(new Thickness(symbolSize.Width, symbolSize.Height));
                 var centerTopLeft = new Point(topLeft.X + 2 * symbolSize.Width, topLeft.Y + 2 * symbolSize.Height);
-                var centerRect = new Rect(centerTopLeft, symbolSize * 3); // 3×3
+                var centerRect = new Rect(centerTopLeft, symbolSize * 3);                          
 
-                double rotation = i switch { 0 => 0.0, 1 => Math.PI / 2.0, _ => -Math.PI / 2.0 };
-
-                DrawCornerByType(geometry, outerRect, CornerDots, rotation, ccw: true);
-                DrawCornerByType(geometry, innerRingRect, CornerDots, rotation, ccw: false);
-                DrawCornerByType(geometry, centerRect, CornerDots, rotation, ccw: true);
+                if (CornerDots == CornerDotsType.Drop)
+                {
+                    AddRect(ctx, outerRect, ccw: false);
+                    AddRect(ctx, innerRect, ccw: true);
+                    AddRect(ctx, centerRect, ccw: false);
+                }
+                else if (CornerDots == CornerDotsType.Circle)
+                {
+                    AddCircle(ctx, outerRect, ccw: false);
+                    AddCircle(ctx, innerRect, ccw: true);
+                    AddCircle(ctx, centerRect, ccw: false);
+                }
+                else 
+                {
+                    AddRect(ctx, outerRect, ccw: false);
+                    AddRect(ctx, innerRect, ccw: true);
+                    AddRect(ctx, centerRect, ccw: false);
+                }
             }
         }
 
@@ -902,7 +907,7 @@ namespace QrCodeStyling.Avalonia
             }
         }
 
-        // Teardrop (rounded “drop”) shape. Path points define winding. Currently CW (solid).
+        // Teardrop (rounded “drop”) shape. Path points define winding.
         private void AddDrop(StreamGeometryContext ctx, Rect b, double rotation)
         {
             const double minX = 0.243347;
@@ -943,34 +948,26 @@ namespace QrCodeStyling.Avalonia
         public override void Render(DrawingContext context)
         {
             base.Render(context);
-
-            // Render nothing when there's no data.
-            // Note, when using in a scenario when you may not have data right away, you can render something over the QRCode like a spinner, etc
             if (_qrCodeGeometry == null)
                 return;
 
             var bounds = new Rect(0, 0, Width, Height);
 
-            // Rounded corners
-            using var _clip = context.PushClip(new RoundedRect(bounds, CornerRadius.TopLeft, CornerRadius.TopRight,
+            using var _clip = context.PushClip(new RoundedRect(
+                bounds, CornerRadius.TopLeft, CornerRadius.TopRight,
                 CornerRadius.BottomRight, CornerRadius.BottomLeft));
 
             if (_oldQrCodeGeometry is var (oldGeometry, _))
             {
-                // The foreground will show through as the qr code will be "cut out" of the background
-                context.DrawRectangle(Foreground, null, bounds);
-                // Render background over the foreground as the geometry has "cut outs" that allow the foreground to show through
-                context.DrawGeometry(Background, null, oldGeometry);
+                context.DrawRectangle(Background, null, bounds);     
+                context.DrawGeometry(Foreground, null, oldGeometry); 
             }
 
             if (_qrCodeGeometry is var (newGeometry, newOpacity))
             {
                 using var _ = context.PushOpacity(newOpacity);
-
-                // The foreground will show through as the qr code will be "cut out" of the background
-                context.DrawRectangle(Foreground, null, bounds);
-                // Render background over the foreground as the geometry has "cut outs" that allow the foreground to show through
-                context.DrawGeometry(Background, null, newGeometry);
+                context.DrawRectangle(Background, null, bounds);
+                context.DrawGeometry(Foreground, null, newGeometry);
             }
 
             if (Image is { } img && _imageRect is Rect dest)
@@ -979,6 +976,7 @@ namespace QrCodeStyling.Avalonia
                 context.DrawImage(img, src, dest);
             }
         }
+
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {

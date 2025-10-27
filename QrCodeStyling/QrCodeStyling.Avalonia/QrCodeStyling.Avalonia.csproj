@@ -17,8 +17,8 @@
         <PackageId>QrCodeStyling.Avalonia</PackageId>
         <PackageDescription>QrCodeStyling.Avalonia is a simple library, written in C#.NET, which enables you to create beautiful QR codes.</PackageDescription>
         <PackageTags>c#;csharp;avalonia;avaloniaui;ui;qr;qrcode-styling;qr-code-styling;qr-styling;qrcode;qr-generator;qr-code-generator</PackageTags>
-        <Version>1.0.0</Version>
-        <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+        <Version>1.1.0</Version>
+        <PackageReleaseNotes>Fix for background and foreground rendering</PackageReleaseNotes>
         <PackageOwners>Ivan Alpatov</PackageOwners>
         <Copyright>Ivan Alpatov</Copyright>
         <Authors>Ivan Alpatov</Authors>
@@ -35,7 +35,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.7" />
+        <PackageReference Include="Avalonia" Version="11.3.8" />
     </ItemGroup>
 
     <ItemGroup>

@@ -8,6 +8,7 @@
         x:Class="QrCodeStyling.Avalonia.Test.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
+        Background="DarkSlateGray"
         Title="QrCodeStyling.Avalonia.Test">
 
     <Design.DataContext>
