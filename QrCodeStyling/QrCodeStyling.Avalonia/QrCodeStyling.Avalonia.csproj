@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <RootNamespace>QrCodeStyling.Avalonia</RootNamespace>
         <UserSecretsId>712f85e4-12d3-41b0-a417-5714a113444f</UserSecretsId>
@@ -35,7 +35,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.8" />
+        <PackageReference Include="Avalonia" Version="12.0.1" />
     </ItemGroup>
 
     <ItemGroup>
