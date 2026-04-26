@@ -875,24 +875,11 @@ namespace QrCodeStyling.Avalonia
                 var centerTopLeft = new Point(topLeft.X + 2 * symbolSize.Width, topLeft.Y + 2 * symbolSize.Height);
                 var centerRect = new Rect(centerTopLeft, symbolSize * 3);                          
 
-                if (CornerDots == CornerDotsType.Drop)
-                {
-                    AddRect(ctx, outerRect, ccw: false);
-                    AddRect(ctx, innerRect, ccw: true);
-                    AddRect(ctx, centerRect, ccw: false);
-                }
-                else if (CornerDots == CornerDotsType.Circle)
-                {
-                    AddCircle(ctx, outerRect, ccw: false);
-                    AddCircle(ctx, innerRect, ccw: true);
-                    AddCircle(ctx, centerRect, ccw: false);
-                }
-                else 
-                {
-                    AddRect(ctx, outerRect, ccw: false);
-                    AddRect(ctx, innerRect, ccw: true);
-                    AddRect(ctx, centerRect, ccw: false);
-                }
+                var rotation = i == 0 ? 0 :
+                    i == 1 ? 1.57 : -1.57;
+                DrawCornerByType(ctx, outerRect, CornerDots, rotation, ccw: false);
+                DrawCornerByType(ctx, innerRect, CornerDots, rotation, ccw: true);
+                DrawCornerByType(ctx, centerRect, CornerDots, rotation, ccw: false);
             }
         }
 
